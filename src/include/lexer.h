@@ -6,8 +6,6 @@
 using namespace std;
 
 // TOKENS
-const string HASH 			= "HASH";
-const string ASTER 			= "ASTER";
 const string LSQR 			= "LSQR";
 const string RSQR 			= "RSQR";
 const string INT 			= "INT";
@@ -17,18 +15,13 @@ const string DIGITS			= "0123456789";
 const string ALPHA			= "abcdefghijklmnopqrstuvwxyz";
 const vector<char> WSPACE	= {' ', '\t', '\n', '\0'};
 const vector<string> KEYWS {
-	"lda", "out", "push", "pull", "sum", "ldb", "ldc", "a", "b" , "c"
+	"lda", "out", "push", "pull", "sum", "ldb", "ldc", "ldo",
+	"lds", "sreg", "areg", "breg", "creg", "oreg", "inc", "dec"
 };
 
-
-class Token {
-public:
-	string type, value;
-
-	Token(string type_, string value_="\0") {
-		this->type = type_;
-		this->value = value_;
-	}
+struct Token { 
+	string type;
+	string value="\0";
 };
 
 class Lexer {
@@ -43,7 +36,7 @@ public:
 	}
 	void set_cmd(string cmd_);
 	void advance();
-	bool make_tokens(vector<vector<Token>> &toks);
+	void make_tokens(vector<vector<Token>> &toks);
 	Token make_number();
 	Token make_keyw();
 };

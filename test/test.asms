@@ -1,3 +1,15 @@
-lda #2
-ldb *1.9
+lda 3
+ldc 2
+push 4
+ldb 3
+sum
+lda sreg
+ldb creg
+sum
+lda sreg
+pull
+ldb sreg
+sum
+inc sreg
+ldo sreg
 out

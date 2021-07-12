@@ -4,8 +4,11 @@
 #include <iostream>
 using namespace std;
 
-const string CHAR_ERROR			= "Char Error";
-const string KEYW_ERROR			= "Keyword Error";
+#define CHAR_ERROR		"Char Error"
+#define KEYW_ERROR		"Keyword Error"
+#define STACK_FULL		"Stack Full"
+#define STACK_EMPTY		"Stack Empty"
+#define LOAD_ERROR		"Load Error"
 
 class Error {
 public:
@@ -13,7 +16,7 @@ public:
 	string details;
 	int line;
 	int char_no;
-	Error(string type_, string details_, int line_, int char_no_) {
+	Error(string type_, string details_, int line_, int char_no_='\0') {
 		this->type = type_;
 		this->details = details_;
 		this->line = line_;
@@ -31,6 +34,21 @@ public:
 class KeywordError : public Error {
 public:
 	KeywordError(string details_, int line_, int char_no_):Error(KEYW_ERROR, details_, line_, char_no_) {}
+};
+
+class StackFullError : public Error {
+public:
+	StackFullError(string details_, int line_):Error(STACK_FULL, details_, line_) {}
+};
+
+class StackEmptyError : public Error {
+public:
+	StackEmptyError(string details_, int line_):Error(STACK_EMPTY, details_, line_) {}
+};
+
+class LoadError : public Error {
+public:
+	LoadError(string details_, int line_):Error(STACK_EMPTY, details_, line_) {}
 };
 
 void draw_pointer(string cmd, int pos);

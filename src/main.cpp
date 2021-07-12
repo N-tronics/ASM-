@@ -4,6 +4,7 @@
 #include <string>
 #include "include/lexer.h"
 #include "include/error.h"
+#include "include/cpu.h"
 using namespace std;
 
 ostream  &operator << (ostream &out, Token &tok) {
@@ -35,13 +36,8 @@ int main(int argc, char **argv) {
 	int line_number = 0;
 	for (string cmd : cmds) {
 		lex.set_cmd(cmd);
-		bool success = lex.make_tokens(tokens);
+		lex.make_tokens(tokens);
 		line_number++;
 	}
-
-	for (vector<Token> line : tokens) {
-		for (Token tok : line)
-			cout << tok << " ";
-		cout << endl;
-	}
+	Interpreter interpret(tokens);
 }

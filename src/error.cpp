@@ -10,12 +10,17 @@ string str_mul(char c, int i) {
 }
 
 void Error::RaiseErr(string cmd, int pos_start)  {
-    cout << "Traceback: (" << this->line << ":" << this->char_no + 1 << ")" << endl;
+    if (this->type == STACK_FULL || this->type == STACK_EMPTY)
+        cout << "Traceback: (" << this->line << ")" << endl;
+    else
+        cout << "Traceback: (" << this->line << ":" << this->char_no + 1 << ")" << endl;
 
     if (this->type == CHAR_ERROR)
         draw_pointer(cmd, this->char_no);
     else if (this->type == KEYW_ERROR)
         draw_underline(cmd, pos_start, this->char_no);
+    else if (this->type == STACK_EMPTY || this->type == STACK_FULL)
+        cout << cmd << endl;
 
     cout << this->type << ": " << this->details << "" << endl;
     exit(1);

@@ -34,7 +34,7 @@ void Lexer::advance() {
         this->current_char = '\0';
 }
 
-bool Lexer::make_tokens(vector<vector<Token>> &toks) {
+void Lexer::make_tokens(vector<vector<Token>> &toks) {
     vector<Token> statement;
     while (this->current_char != '\0') {
         if (is_in<char, vector<char>>(this->current_char, WSPACE))
@@ -45,22 +45,14 @@ bool Lexer::make_tokens(vector<vector<Token>> &toks) {
         else if (is_in(this->current_char, ALPHA)) {
             statement.push_back(this->make_keyw());
         }
-        else if (current_char == '#') {
-            statement.push_back(Token(HASH));
-            this->advance();
-        }
         else if (current_char == '[') {
-            statement.push_back(Token(LSQR));
+            statement.push_back(Token{LSQR});
             this->advance();
         }
 		else if (current_char == ']') {
-			statement.push_back(Token(RSQR));
+			statement.push_back(Token{RSQR});
             this->advance();
 		}
-        else if (current_char == '*') {
-            statement.push_back(Token(ASTER));
-            this->advance();
-        }
 		else {
             string chr; 
             chr += "'"; 
@@ -71,8 +63,6 @@ bool Lexer::make_tokens(vector<vector<Token>> &toks) {
 		}
     }
     toks.push_back(statement);
-
-    return true;
 }
 
 Token Lexer::make_number() {
@@ -90,8 +80,8 @@ Token Lexer::make_number() {
     if (num_str[-1] == '.') num_str += "0";
     else if (num_str[0] == '.') num_str.insert(0, "0");
 
-    if (is_float) return Token(FLOAT, num_str);
-    else return Token(INT, num_str);
+    if (is_float) return Token{FLOAT, num_str};
+    else return Token{INT, num_str};
 }
 
 Token Lexer::make_keyw() {
@@ -118,5 +108,5 @@ Token Lexer::make_keyw() {
         err.RaiseErr(this->cmd, pos_start);
     }
 
-    return Token(KEYW, keyw);
+    return Token{KEYW, keyw};
 }
