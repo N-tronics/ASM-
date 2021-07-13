@@ -39,20 +39,33 @@ void Lexer::make_tokens(vector<vector<Token>> &toks) {
     while (this->current_char != '\0') {
         if (is_in<char, vector<char>>(this->current_char, WSPACE))
             this->advance();
-        else if (is_in(this->current_char, DIGITS + '.')) {
+        else if (is_in(this->current_char, DIGITS)) {
             statement.push_back(this->make_number());
         }
         else if (is_in(this->current_char, ALPHA)) {
             statement.push_back(this->make_keyw());
         }
-        else if (current_char == '[') {
-            statement.push_back(Token{LSQR});
-            this->advance();
+        else if (this->current_char == '/') {
+            if (this->cmd[this->idx + 1] == '/') {
+                break;
+            } 
+            else {
+                string chr; 
+                chr += "'"; 
+                chr += this->current_char; 
+                chr += "'";
+                SyntaxError err(chr, this->line, this->idx);
+                err.RaiseErr(this->cmd);
+            }
         }
-		else if (current_char == ']') {
-			statement.push_back(Token{RSQR});
-            this->advance();
-		}
+        else if (this->current_char == '.' && is_in(this->cmd[this->idx + 1], ALPHA)) {
+            string chr;
+            chr += "'"; 
+            chr += this->current_char; 
+            chr += "'";
+            DecimalPoint err(chr, this->line, this->idx);
+            err.RaiseErr(this->cmd);
+        }
 		else {
             string chr; 
             chr += "'"; 
@@ -62,26 +75,26 @@ void Lexer::make_tokens(vector<vector<Token>> &toks) {
             err.RaiseErr(this->cmd);
 		}
     }
+    
     toks.push_back(statement);
 }
 
 Token Lexer::make_number() {
     string num_str;
-    bool is_float = false;
-    while (is_in(this->current_char, DIGITS + '.')) {
+    while (is_in(this->current_char, DIGITS)) {
         num_str += this->current_char;
         if (this->current_char == '.') {
-            if (is_float) break;
-            is_float = true;
+            string chr;
+            chr += "'"; 
+            chr += this->current_char; 
+            chr += "'";
+            DecimalPoint err(chr, this->line, this->idx);
+            err.RaiseErr(this->cmd);
         }
         this->advance();
     }
 
-    if (num_str[-1] == '.') num_str += "0";
-    else if (num_str[0] == '.') num_str.insert(0, "0");
-
-    if (is_float) return Token{FLOAT, num_str};
-    else return Token{INT, num_str};
+    return Token{INT, num_str};
 }
 
 Token Lexer::make_keyw() {
@@ -97,7 +110,6 @@ Token Lexer::make_keyw() {
             chr += "'"; 
             chr += this->current_char; 
             chr += "'";
-            cout << int(this->current_char) << endl;
             CharError err(chr, this->line, this->idx);
             err.RaiseErr(this->cmd);
         }

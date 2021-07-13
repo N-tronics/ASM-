@@ -28,16 +28,13 @@ vector<string> read_file(string asms_file) {
 }
 
 int main(int argc, char **argv) {
-	
 	vector<string> cmds = read_file(argv[1]);
 	Lexer lex;
 	vector<vector<Token>> tokens;
 
-	int line_number = 0;
 	for (string cmd : cmds) {
 		lex.set_cmd(cmd);
 		lex.make_tokens(tokens);
-		line_number++;
 	}
 	Interpreter interpret(tokens);
 }

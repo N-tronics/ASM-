@@ -19,3 +19,4 @@
 14. ```oreg```  - Accesses the output register
 15. ```inc {reg}``` - Increments the value of a register
 16. ```dec {reg}``` - Decrements the value of a register
+17. ```//``` - Defines a comment

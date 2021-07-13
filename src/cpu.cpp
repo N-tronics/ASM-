@@ -115,116 +115,87 @@ void Interpreter::execute() {
 	for (int i = 0; i < this->toks.size(); i++) {
 		this->cpu.update_line(i);
 		this->line = i;
-
 		Token cmd = this->toks[i][0];
 		if (this->toks[i].size() == 2) {
 			Token value = this->toks[i][1];
+
+			int val;
+			if (value.value == "areg") 
+				val = this->cpu.BREG();
+			else if (value.value == "breg")
+				val = this->cpu.BREG();
+			else if (value.value == "creg")
+				val = this->cpu.CREG();
+			else if (value.value == "sreg")
+				val = this->cpu.SREG();
+			else if (value.value == "oreg")
+				val = this->cpu.OREG();
+
 			if (cmd.value == "lda") {
 				if (value.type == INT)
 					this->cpu.lda(stoi(value.value));
 				else if (value.type == KEYW) {
 					if (value.value == "areg") {
-						LoadError err(value.value, this->line);
+						LoadError err(value.value, this->line + 1);
 						err.RaiseErr(cmd.value + " " + value.value);
 					}
-					else if (value.value == "breg")
-						this->cpu.lda(this->cpu.BREG());
-					else if (value.value == "creg")
-						this->cpu.lda(this->cpu.CREG());
-					else if (value.value == "sreg")
-						this->cpu.lda(this->cpu.SREG());
-					else if (value.value == "oreg")
-						this->cpu.lda(this->cpu.OREG());
+					else
+						this->cpu.lda(val);
 				}
 			}
 			else if (cmd.value == "ldb") {
 				if (value.type == INT)
 					this->cpu.ldb(stoi(value.value));
 				else if (value.type == KEYW) {
-					if (value.value == "areg")
-						this->cpu.ldb(this->cpu.AREG());
-					else if (value.value == "breg") {
-						LoadError err(value.value, this->line);
+					if (value.value == "breg") {
+						LoadError err(value.value, this->line + 1);
 						err.RaiseErr(cmd.value + " " + value.value);
 					}
-					else if (value.value == "creg")
-						this->cpu.ldb(this->cpu.CREG());
-					else if (value.value == "sreg")
-						this->cpu.ldb(this->cpu.SREG());
-					else if (value.value == "oreg")
-						this->cpu.ldb(this->cpu.OREG());
+					else
+						this->cpu.ldb(val);
 				}
 			}
 			else if (cmd.value == "ldc") {
 				if (value.type == INT)
 					this->cpu.ldc(stoi(value.value));
 				else if (value.type == KEYW) {
-					if (value.value == "areg")
-						this->cpu.ldc(this->cpu.AREG());
-					else if (value.value == "breg")
-						this->cpu.ldc(this->cpu.BREG());
-					else if (value.value == "creg") {
-						LoadError err(value.value, this->line);
+					if (value.value == "creg") {
+						LoadError err(value.value, this->line + 1);
 						err.RaiseErr(cmd.value + " " + value.value);
 					}
-					else if (value.value == "sreg")
-						this->cpu.ldc(this->cpu.SREG());
-					else if (value.value == "oreg")
-						this->cpu.ldc(this->cpu.OREG());
+					else
+						this->cpu.ldc(val);
 				}
 			}
 			else if (cmd.value == "lds") {
 				if (value.type == INT)
 					this->cpu.lds(stoi(value.value));
 				else if (value.type == KEYW) {
-					if (value.value == "areg")
-						this->cpu.lds(this->cpu.AREG());
-					else if (value.value == "breg")
-						this->cpu.lds(this->cpu.BREG());
-					else if (value.value == "creg")
-						this->cpu.lds(this->cpu.CREG());
-					else if (value.value == "sreg") {
-						LoadError err(value.value, this->line);
+					if (value.value == "sreg") {
+						LoadError err(value.value, this->line + 1);
 						err.RaiseErr(cmd.value + " " + value.value);
 					}
-					else if (value.value == "oreg")
-						this->cpu.lds(this->cpu.OREG());
+					else
+						this->cpu.lds(val);
 				}
 			}
 			else if (cmd.value == "ldo") {
 				if (value.type == INT)
 					this->cpu.ldo(stoi(value.value));
 				else if (value.type == KEYW) {
-					if (value.value == "areg")
-						this->cpu.ldo(this->cpu.AREG());
-					else if (value.value == "breg")
-						this->cpu.ldo(this->cpu.BREG());
-					else if (value.value == "creg")
-						this->cpu.ldo(this->cpu.CREG());
-					else if (value.value == "sreg")
-						this->cpu.ldo(this->cpu.SREG());
-					else if (value.value == "oreg") {
-						LoadError err(value.value, this->line);
+					if (value.value == "oreg") {
+						LoadError err(value.value, this->line + 1);
 						err.RaiseErr(cmd.value + " " + value.value);
 					}
+					else
+						this->cpu.ldo(val);
 				}
 			}
 			else if (cmd.value == "push") {
 				if (value.type == INT)
 					this->cpu.push(stoi(value.value));
-				else if (value.type == KEYW) {
-					if (value.value == "areg")
-						this->cpu.push(this->cpu.AREG());
-					else if (value.value == "breg")
-						this->cpu.push(this->cpu.BREG());
-					else if (value.value == "creg")
-						this->cpu.push(this->cpu.CREG());
-					else if (value.value == "sreg")
-						this->cpu.push(this->cpu.SREG());
-					else if (value.value == "oreg") {
-						this->cpu.push(this->cpu.OREG());
-					}
-				}
+				else if (value.type == KEYW)
+					this->cpu.push(val);
 			}
 			else if (cmd.value == "inc") {
 				if (value.type == KEYW)
@@ -239,6 +210,7 @@ void Interpreter::execute() {
 			if (cmd.value == "pull") this->cpu.pull();
 			else if (cmd.value == "sum") this->cpu.sum();
 			else if (cmd.value == "out") this->cpu.out();
+			else continue;
 		}
 	}
 }

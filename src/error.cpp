@@ -19,10 +19,10 @@ void Error::RaiseErr(string cmd, int pos_start)  {
         draw_pointer(cmd, this->char_no);
     else if (this->type == KEYW_ERROR)
         draw_underline(cmd, pos_start, this->char_no);
-    else if (this->type == STACK_EMPTY || this->type == STACK_FULL)
+    else
         cout << cmd << endl;
 
-    cout << this->type << ": " << this->details << "" << endl;
+    cout << this->type << ": " << this->details << endl;
     exit(1);
 }
 

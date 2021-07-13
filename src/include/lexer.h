@@ -6,10 +6,7 @@
 using namespace std;
 
 // TOKENS
-const string LSQR 			= "LSQR";
-const string RSQR 			= "RSQR";
 const string INT 			= "INT";
-const string FLOAT			= "FLOAT";
 const string KEYW			= "KEYW";
 const string DIGITS			= "0123456789";
 const string ALPHA			= "abcdefghijklmnopqrstuvwxyz";
@@ -17,6 +14,9 @@ const vector<char> WSPACE	= {' ', '\t', '\n', '\0'};
 const vector<string> KEYWS {
 	"lda", "out", "push", "pull", "sum", "ldb", "ldc", "ldo",
 	"lds", "sreg", "areg", "breg", "creg", "oreg", "inc", "dec"
+};
+const vector<char> IGNORE = {
+	'/'
 };
 
 struct Token { 
